@@ -1159,4 +1159,5 @@
     <string name="control_editor_special_joystick_style_tip_title"></string>
     <string name="versions_export_task_error_message"></string>
     <string name="settings_renderer_surface_title"></string>
+    <string name="account_label_server_url"></string>
 </resources>

@@ -131,7 +131,9 @@ import java.io.File
 import java.io.IOException
 import javax.inject.Inject
 
-// 数据模型
+/**
+ * 游戏内截图信息
+ */
 data class ScreenshotInfo(
     val file: File,
     val name: String = file.nameWithoutExtension,
@@ -148,7 +150,7 @@ sealed interface ExportOperation {
 
 @HiltViewModel
 class ScreenshotsManageViewModel @Inject constructor(
-    @param:ApplicationContext private val context: Context // 注入全局 ApplicationContext
+    @param:ApplicationContext private val context: Context
 ) : ViewModel() {
 
     private var screenshotDir: File? = null
@@ -172,7 +174,9 @@ class ScreenshotsManageViewModel @Inject constructor(
     var deleteAllOperation by mutableStateOf<DeleteAllOperation>(DeleteAllOperation.None)
     var exportOperation by mutableStateOf<ExportOperation>(ExportOperation.None)
 
-    // 提供给 UI 层的初始化方法
+    /**
+     * 初始化截图文件夹
+     */
     fun initDirectory(dir: File) {
         if (screenshotDir != dir) {
             screenshotDir = dir
@@ -180,24 +184,30 @@ class ScreenshotsManageViewModel @Inject constructor(
         }
     }
 
+    /**
+     * 全选当前已过滤的结果
+     */
     fun selectAllFiles() {
         filteredScreenshots?.forEach { shot ->
             if (!selectedShots.contains(shot)) selectedShots.add(shot)
         }
     }
 
+    /**
+     * 取消选择当前已过滤的结果
+     */
     fun clearSelected() {
         filteredScreenshots?.let {
             selectedShots.removeAll(it)
         }
     }
 
-    // 提取的业务逻辑：请求删除选中的图片
+    /**
+     * 发起删除选择的截图的请求，先警告用户
+     */
     fun requestDeleteSelected() {
         if (deleteAllOperation == DeleteAllOperation.None && selectedShots.isNotEmpty()) {
-            deleteAllOperation = DeleteAllOperation.Warning(
-                selectedShots.map { it.file }
-            )
+            deleteAllOperation = DeleteAllOperation.Warning(selectedShots.map { it.file })
         }
     }
 
@@ -235,7 +245,6 @@ class ScreenshotsManageViewModel @Inject constructor(
 
     private var exportsJob: Job? = null
 
-    // 移除 context 参数，直接使用注入的全局 context
     fun exports(
         onSuccess: suspend () -> Unit,
         onFailed: suspend (e: Exception) -> Unit
@@ -267,8 +276,7 @@ class ScreenshotsManageViewModel @Inject constructor(
         file: File
     ) {
         val fileName = file.name
-        val relativePath =
-            Environment.DIRECTORY_PICTURES + "/" + InfoDistributor.LAUNCHER_IDENTIFIER + "/"
+        val relativePath = Environment.DIRECTORY_PICTURES + "/" + InfoDistributor.LAUNCHER_IDENTIFIER + "/"
 
         //如果是已存在的文件，则Uri不为null
         val existingUri = queryExistingUri(resolver, fileName, relativePath)
@@ -328,8 +336,7 @@ class ScreenshotsManageViewModel @Inject constructor(
         relativePath: String
     ): Uri? {
         val projection = arrayOf(MediaStore.Images.Media._ID)
-        val selection =
-            "${MediaStore.Images.Media.DISPLAY_NAME} = ? AND ${MediaStore.Images.Media.RELATIVE_PATH} = ?"
+        val selection = "${MediaStore.Images.Media.DISPLAY_NAME} = ? AND ${MediaStore.Images.Media.RELATIVE_PATH} = ?"
         val selectionArgs = arrayOf(fileName, relativePath)
 
         resolver.query(
@@ -418,13 +425,12 @@ fun ScreenshotsManagerScreen(
         ),
         Triple(NormalNavKey.Versions.ScreenshotsManager, versionsScreenKey, false)
     ) { isVisible ->
-        // 使用 hiltViewModel，依然通过 key 保证其针对不同版本的数据独立性
         val viewModel: ScreenshotsManageViewModel = hiltViewModel(
             key = version.toString() + "_" + VersionFolders.SCREENSHOTS.folderName
         )
 
-        // 传递初始化目录
         LaunchedEffect(screenshotDir) {
+            //初始化截图文件夹
             viewModel.initDirectory(screenshotDir)
         }
 
@@ -444,7 +450,6 @@ fun ScreenshotsManagerScreen(
             updateOperation = { viewModel.exportOperation = it },
             selectedShots = viewModel.selectedShots,
             onExport = {
-                // 不再需要传递 context
                 viewModel.exports(
                     onSuccess = {
                         withContext(Dispatchers.Main) {
@@ -488,7 +493,6 @@ fun ScreenshotsManagerScreen(
                                 onSortByChanged = { viewModel.updateSortBy(it) },
                                 isAscending = viewModel.isAscending,
                                 onToggleSortOrder = { viewModel.updateSortOrder() },
-                                // 使用 ViewModel 中提取好的业务逻辑
                                 onDeleteAll = { viewModel.requestDeleteSelected() },
                                 isFilesSelected = viewModel.selectedShots.isNotEmpty(),
                                 onSelectAll = { viewModel.selectAllFiles() },
@@ -507,6 +511,7 @@ fun ScreenshotsManagerScreen(
                             )
                         }
 
+                        //导出图片悬浮按钮
                         if (viewModel.allScreenshots.isNotEmpty()) {
                             FloatingActionButton(
                                 onClick = {
@@ -783,7 +788,6 @@ private fun ScreenshotItemLayout(
         scale.animateTo(targetValue = 1f, animationSpec = getAnimateTween())
     }
 
-    // 移除 Surface 自带的 onClick，将点击逻辑下放到内部的 Box 进行统一处理
     Surface(
         modifier = modifier
             .graphicsLayer(scaleY = scale.value, scaleX = scale.value)
@@ -810,7 +814,6 @@ private fun ScreenshotItemLayout(
                     }
                 )
         ) {
-            // 使用 Coil 加载图片缩略图
             AsyncImage(
                 model = info.file,
                 contentDescription = info.name,

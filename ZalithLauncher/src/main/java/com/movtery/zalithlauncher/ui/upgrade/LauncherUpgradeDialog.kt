@@ -145,7 +145,15 @@ fun UpgradeDialog(
                     } else {
                         FilledTonalButton(
                             onClick = {
-                                onCloudDriveClick(cloudDrive)
+                                if (cloudDrive.links.isEmpty()) {
+                                    //未配置多网盘链接，使用默认链接（旧版兼容，必定会有）
+                                    onLinkClick(cloudDrive.link)
+                                } else if (cloudDrive.links.size == 1) {
+                                    //只有一个网盘链接，则直接访问链接
+                                    onLinkClick(cloudDrive.links[0].link)
+                                } else {
+                                    onCloudDriveClick(cloudDrive)
+                                }
                             }
                         ) {
                             Text(text = stringResource(R.string.upgrade_cloud_drive))

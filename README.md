@@ -1,8 +1,8 @@
 # BismuthLauncher
 
 <p align="center">
-  <img src="https://img.shields.io/github/v/release/echoloji/ZalithLauncher2-Offline?style=for-the-badge&color=7C4DFF&logo=github" alt="Release">
-  <img src="https://img.shields.io/github/downloads/echoloji/ZalithLauncher2-Offline/total?style=for-the-badge&color=B388FF&logo=github" alt="Downloads">
+  <img src="https://img.shields.io/github/v/release/echoloji/BismuthLauncher?style=for-the-badge&color=7C4DFF&logo=github" alt="Release">
+  <img src="https://img.shields.io/github/downloads/echoloji/BismuthLauncher/total?style=for-the-badge&color=B388FF&logo=github" alt="Downloads">
 </p>
 
 ---
@@ -21,10 +21,10 @@ This repository is a specialized fork of **Zalith Launcher 2**, a modern Minecra
 
 ---
 
-## 📜 Licensing
+## 📜 License
 This project is licensed under the **GNU General Public License v3 (GPL-3.0)**.  
 In accordance with **Section 7** of the GPLv3:
-1.  **Identification:** This version is clearly marked as "Unofficial" to distinguish it from the original software.
+1.  **Identification:** This version has been renamed “BismuthLauncher” to distinguish it from the original software.
 2.  **Attribution:** All original copyright notices and library licenses have been preserved.
 
 ---

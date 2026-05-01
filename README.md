@@ -3,8 +3,6 @@
 <p align="center">
   <img src="https://img.shields.io/github/v/release/dotseksdotseks/ZalithLauncher2?style=for-the-badge&color=7C4DFF&logo=github" alt="Release">
   <img src="https://img.shields.io/github/downloads/dotseksdotseks/ZalithLauncher2/total?style=for-the-badge&color=B388FF&logo=github" alt="Downloads">
-  <img src="https://img.shields.io/github/repo-size/dotseksdotseks/ZalithLauncher2?style=for-the-badge&color=FF4081" alt="Repo Size">
-  <img src="https://img.shields.io/github/languages/top/dotseksdotseks/ZalithLauncher2?style=for-the-badge&color=00E676" alt="Top Language">
 </p>
 
 ---

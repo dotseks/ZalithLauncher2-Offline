@@ -68,8 +68,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = zalithPackageName
-        applicationIdSuffix = ".v2"
+        applicationId = com.echoloji.bismuth
         minSdk = 26
         targetSdk = 35
         versionCode = launcherVersionCode
